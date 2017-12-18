@@ -1,2 +1,2 @@
-python1 FlappyBird.py
+python FlappyBird.py
 pause
