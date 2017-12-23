@@ -1,5 +1,11 @@
 ### TODO
 ---
 add functions as you like!
-- font
 - boradcast
+### Update
+---
+- Adjustment for font and password input
+
+### Shall we add...?
+---
+- ​

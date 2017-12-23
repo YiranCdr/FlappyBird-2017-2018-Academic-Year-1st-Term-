@@ -1,3 +1,6 @@
 *.pyc
 *.vscode
 *.txt
+*.idea
+*.idea/*
+*.xml
