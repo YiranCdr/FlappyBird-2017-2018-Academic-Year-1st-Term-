@@ -479,8 +479,11 @@ class InputMenu(Menu):
 		super(InputMenu, self).__init__()
 		self.menu_valign = CENTER
 		self.menu_halign = CENTER
+		self.font_item_selected['font_name'] = 'Bulky Pixels'
+		self.font_item['font_name'] = 'Bulky Pixels'
 		self.font_item['font_size'] = 10
 		self.font_item_selected['font_size'] = 20
+
 		items = [
 			(EntryMenuItem('Account:', getName, '', 10)),
 			(myEntryMenuItem('Password:', getPassword, '', 20)),

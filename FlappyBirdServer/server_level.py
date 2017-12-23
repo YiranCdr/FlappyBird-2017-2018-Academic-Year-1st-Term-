@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import socket, select, netstream, random, pickle, os, traceback, file_operation_level, types
+import socket, select, netstream, random, pickle, os, traceback, file_operation_level, types, thread, pyhooked
 
 HOST = "127.0.0.1"
 disconnected_list = []#断开连接的客户端列表
@@ -13,18 +13,43 @@ EASY = 1
 MID = 2
 HARD = 3
 
-if __name__ == "__main__":
-	s = socket.socket()
+ON = 1
+OFF = 0
+server_state = OFF
 
-	host = HOST
-	port = 9234
+def checkKey(event):
+	if isinstance(event, pyhooked.KeyboardEvent):
+		print event.key_code
+		global server_state
+		if event.key_code == 48 or event.key_code == 96: # Enter
+			if server_state == OFF:
+				server_state = ON
+			else:
+				global sid, onlineUser, cInfo
+				sid = 0
+				onlineUser = {}
+				cInfo = []
+				print 'server reset. '
 
-	s.bind((host, port))
-	s.listen(4)
+def checkKey_thread():
+	hook_manager = pyhooked.Hook()
+	hook_manager.handler = checkKey
+	hook_manager.hook()
 
-	inputs = []
-	inputs.append(s)
-	print 'server start! listening host:', host, ' port:', port
+thread.start_new_thread(checkKey_thread, ())
+while server_state == OFF:
+	xxx = 1 # nonsence.
+
+s = socket.socket()
+host = HOST
+port = 9234
+
+s.bind((host, port))
+s.listen(4)
+
+inputs = []
+inputs.append(s)
+print 'server start! listening host:', host, ' port:', port
 
 while inputs:
 	try:
