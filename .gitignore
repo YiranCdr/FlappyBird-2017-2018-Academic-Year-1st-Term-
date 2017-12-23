@@ -4,3 +4,9 @@
 *.idea
 *.idea/*
 *.xml
+*/*.pyc
+*/*.vscode
+*/*.txt
+*/*.idea
+*/*.idea/*
+*/*.xml
