@@ -4,9 +4,13 @@
 *.idea
 *.idea/*
 *.xml
+*.idea
+*.DS_Store
 */*.pyc
 */*.vscode
 */*.txt
 */*.idea
 */*.idea/*
 */*.xml
+*/*.idea
+*/*.DS_Store
