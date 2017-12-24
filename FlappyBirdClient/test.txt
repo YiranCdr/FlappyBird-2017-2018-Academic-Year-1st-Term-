@@ -1,0 +1,43 @@
+----------------------Test for notice---------------------
+----------------------Test for notice---------------------
+------------------------Notice test-----------------------
+thread number: 10
+Handling events: 10
+average time: 0.0107999801636s
+throughput rate: 92.593
+----------------------Notice test over--------------------
+----------------------Test for notice---------------------
+------------------------Notice test-----------------------
+thread number: 50
+Handling events: 50
+average time: 0.508119974136s
+throughput rate: 1.968
+----------------------Notice test over--------------------
+----------------------Test for notice---------------------
+------------------------Notice test-----------------------
+thread number: 100
+Handling events: 56
+average time: 0.307232103177s
+throughput rate: 3.255
+----------------------Notice test over--------------------
+----------------------Test for notice---------------------
+------------------------Notice test-----------------------
+thread number: 200
+Handling events: 95
+average time: 0.503768408926s
+throughput rate: 1.985
+----------------------Notice test over--------------------
+----------------------Test for notice---------------------
+------------------------Notice test-----------------------
+thread number: 500
+Handling events: 163
+average time: 0.433717796408s
+throughput rate: 2.306
+----------------------Notice test over--------------------
+----------------------Test for notice---------------------
+------------------------Notice test-----------------------
+thread number: 1000
+Handling events: 223
+average time: 0.515506723002s
+throughput rate: 1.94
+----------------------Notice test over--------------------

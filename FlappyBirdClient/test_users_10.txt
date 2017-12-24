@@ -1,0 +1,25 @@
+------------------------Test Start------------------------
+No.8 getsid time: 0.0150001049042s
+No.9 getsid time: 0.0150001049042s
+No.6 regist time: 0.0160000324249s
+No.2 regist time: 0.0160000324249s
+No.10 regist time: 0.0160000324249s
+No.3 log_in time: 0.0199999809265s
+No.6 log_in time: 0.00299978256226s
+No.2 log_in time: 0.00600004196167s
+No.8 log_in time: 0.00600004196167s
+No.9 log_in time: 0.00499987602234s
+No.8 mscore time: 0.0150001049042s
+No.7 mscore time: 0.00300002098083s
+No.2 mscore time: 0.00399994850159s
+No.6 mscore time: 0.00300002098083s
+No.1 chanmp time: 0.000999927520752s
+No.1 logout time: 0.00200009346008s
+No.3 chanmp time: 0.00399994850159s
+No.4 chanmp time: 0.00400018692017s
+-----------------------Test result-----------------------
+Thread number: 10
+Handling events: 60
+Average time: 0.00256667137146s
+Throughput rate: 389.61
+------------------------Test over-------------------------
