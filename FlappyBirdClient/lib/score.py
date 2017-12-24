@@ -22,10 +22,12 @@ def setSpriteScores(score):
             pass
 
     scoreStr = str(score)
+    length = len(scoreStr)
+    first = length * 18 / 2.0 - 9
     i = 0
     for d in scoreStr:
         s = createAtlasSprite("number_score_0"+d)
-        s.position = common.visibleSize["width"]/2 + 18 * i, common.visibleSize["height"]*4/5
+        s.position = common.visibleSize["width"]/2 + 18 * i - first, common.visibleSize["height"]*4/5
         scoreLayer.add(s, z=50)
         spriteScores[i] = s
         i = i + 1
