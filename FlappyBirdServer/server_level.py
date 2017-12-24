@@ -17,7 +17,7 @@ ON = 1
 OFF = 0
 server_state = OFF
 
-
+# Judge if the input type is right.
 def judge_input_type(ju):
 	if type(ju)!= type('str'):
 		print 'Wrong type. str without '' please. '
@@ -25,6 +25,7 @@ def judge_input_type(ju):
 	return True
 
 
+# check start/restart command from keyboard.
 def checkKey(event):
 	if isinstance(event, pyhooked.KeyboardEvent):
 		global server_state
@@ -39,20 +40,26 @@ def checkKey(event):
 				print 'server reset. '
 
 
+
+# check keyboard event as a thread.
 def checkKey_thread():
 	hook_manager = pyhooked.Hook()
 	hook_manager.handler = checkKey
 	hook_manager.hook()
 
 
+# ask if adding into black list is needed.
 tmp_judge = raw_input('Do you want to add your BlackList? [y/n]')
+# if type wrong.
 while judge_input_type(tmp_judge) == False:
 	tmp_judge = raw_input('Do you want to add your BlackList? [y/n]')
 
+# if invalid input
 while tmp_judge != 'y' and tmp_judge != 'Y' and tmp_judge != 'n' and tmp_judge != 'N':
 	print 'Invalid choice. '
 	tmp_judge = raw_input('Do you want to add your BlackList? [y/n]')
 
+# if add
 while tmp_judge == 'y' or tmp_judge == 'Y':
 	print 'Add into Black List: '
 	black_account = raw_input("UserName: ")
@@ -130,6 +137,7 @@ while inputs:
 					print recvData
 
 					number = recvData['sid']
+					# for broadcast
 					if 'notice' in recvData and 'account' in recvData:
 
 						# judge if type is acceptable.
@@ -147,6 +155,7 @@ while inputs:
 							sendData['sid'] = number
 							netstream.send(onlineUser[number]['connection'], sendData)
 						number = recvData['sid']
+					# for log in and register
 					elif 'sendState' in recvData and 'account' in recvData and 'password' in recvData:
 
 						# judge if type is acceptable.
@@ -195,6 +204,7 @@ while inputs:
 								sendData = {'successfully': 'log in successfully!', 'sid': number}
 								netstream.send(onlineUser[number]['connection'], sendData)
 
+					# for log out
 					elif 'log_out' in recvData:
 
 						# judge if type is acceptable.
@@ -206,6 +216,7 @@ while inputs:
 						netstream.send(onlineUser[number]['connection'], sendData)
 						print 'log out - sid: ', number
 
+					# for changing score and time
 					elif 'account' in recvData and 'password' in recvData and 'score' in recvData and 'time' in recvData and 'level' in recvData:
 
 						# judge if type is acceptable.
@@ -228,6 +239,7 @@ while inputs:
 									'best_time': final_best_time, 'sid': number}
 						netstream.send(onlineUser[number]['connection'], sendData)
 
+					# for request champion.
 					elif 'requestChampion' in recvData and 'level' in recvData:
 
 						if type(recvData['level']) != type(1) or recvData['level'] < EASY or recvData['level'] > HARD:

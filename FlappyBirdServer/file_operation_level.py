@@ -10,6 +10,7 @@ EASY = 1
 MID = 2
 HARD = 3
 
+# search user with goal name in file user_data_level.txt)
 def search_user(goal_name):
     lineNum = NO_SUCH_USER
     if not os.path.isfile('user_data_level.txt'):
@@ -31,6 +32,7 @@ def search_user(goal_name):
         return NO_SUCH_USER
 
 
+# search user in black list
 def search_user_black_list(goal_name):
     lineNum = NO_SUCH_USER
     if not os.path.isfile('black_list.txt'):
@@ -52,18 +54,21 @@ def search_user_black_list(goal_name):
         return NO_SUCH_USER
 
 
+# write new user into user_data_level.txt
 def write_new_user(user_name, password):
     with open("user_data_level.txt", "a") as user_data_file:
         # username + score + time
         print(user_name + ':' + password + ':0' + ':0' + ':0' + ':0' + ':0' + ':0' , file = user_data_file)
 
 
+# write new account into black list.
 def write_new_user_black_list(user_name, password):
     with open("black_list.txt", "a") as user_data_file:
         # username + score + time
         print(user_name + ':' + password + ':0' + ':0' + ':0' + ':0' + ':0' + ':0' , file = user_data_file)
 
 
+# check if the account and the password consistent
 # Please use this function once you have checked that the user exist.
 def check_password(userName, password):
     lineNum = search_user(userName)
@@ -79,6 +84,9 @@ def check_password(userName, password):
                     return False
             tmp_lineNum = tmp_lineNum + 1
 
+
+# update record
+# return best score of this user under this level.
 # Please use this function once you have checked that the user exist.
 def update_record(userName, score, time, level):
     global my_best_score
@@ -145,6 +153,7 @@ def update_record(userName, score, time, level):
     return my_best_score, my_best_time
 
 
+# find the champion under this level.
 def find_champion(level):
     champion_account = 'a'
     champion_score = 0
