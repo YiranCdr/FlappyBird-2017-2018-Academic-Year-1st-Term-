@@ -7,7 +7,6 @@ serialID = 0            #server向客户端发回的序列ID号
 isSet = False
 
 logInState = 0
-isRead = False
 connected = False
 
 def connect(gameScene):
@@ -48,8 +47,6 @@ def connect(gameScene):
             game_controller.showContent(data['notice_content']) #show+Content is from game_controller
 
         if 'error1' in data:
-            # isRead = True
-            print("here")
             print data['error1']
             logInState = 1
             import game_controller
@@ -60,9 +57,21 @@ def connect(gameScene):
             import game_controller
             logInState = 2
             game_controller.sendLogInMessange(logInState)
+
+        # if 'error1-1' in data:
+        #     print data['error1-1']
+        #     logInState = 3
+        #     import game_controller
+        #     game_controller.sendLogInMessange(logInState)
             
         if 'error2' in data:
             print data['error2']
+            logInState = 6
+            import game_controller
+            game_controller.sendLogInMessange(logInState)
+
+        if 'error2-1' in data:
+            print data['error2-1']
             logInState = 7
             import game_controller
             game_controller.sendLogInMessange(logInState)
@@ -135,4 +144,10 @@ def send_score(account, password, score, time, level):
     send_data['score'] = score
     send_data['time'] = time
     send_data['level'] = level
+    netstream.send(sock, send_data)
+
+def send_notice(notice_send, account):
+    send_data = get_send_data()
+    send_data['notice'] = notice_send
+    send_data['account'] = account
     netstream.send(sock, send_data)

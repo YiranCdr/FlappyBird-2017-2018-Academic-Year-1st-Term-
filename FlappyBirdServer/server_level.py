@@ -140,11 +140,11 @@ while inputs:
 
 						print 'Receive: account ', recvData['account'], 'password ', recvData['password']
 						if recvData['sendState'] == REGISTER:
-							if file_operation_level.search_user_black_list(recvData['account']) != file_operation_level.NO_SUCH_USER:
-								print 'error: Account in black list. '
-								sendData = {'error1-1': 'Account in black list. ', 'sid': number}
-								netstream.send(onlineUser[number]['connection'], sendData)
-							elif file_operation_level.search_user(
+							# if file_operation_level.search_user_black_list(recvData['account']) != file_operation_level.NO_SUCH_USER:
+							# 	print 'error: Account in black list. '
+							# 	sendData = {'error1-1': 'Account in black list. ', 'sid': number}
+							# 	netstream.send(onlineUser[number]['connection'], sendData)
+							if file_operation_level.search_user(
 									recvData['account']) == file_operation_level.NO_SUCH_USER:
 								file_operation_level.write_new_user(recvData['account'], recvData['password'])
 								sendData = {'create': 'new account finished. ', 'sid': number}

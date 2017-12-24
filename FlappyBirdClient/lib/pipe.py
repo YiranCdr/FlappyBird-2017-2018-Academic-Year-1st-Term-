@@ -9,6 +9,8 @@ from score import *
 import game_controller
 from game_controller import *
 import common
+from file_operation_level import *
+import time
 
 #######################
 #pipeDistance要改为[]
@@ -20,7 +22,7 @@ pipeWidth = 52
 # pipeDistance = 100    #上下管道间的距离
 pipeDistance = [100,100]    #上下管道间的距离
 pipeInterval = 180    #两根管道的水平距离
-waitDistance = 100    #开始时第一根管道距离屏幕最右侧的距离
+waitDistance = 100   #开始时第一根管道距离屏幕最右侧的距离
 heightOffset = 25     #管道的高度偏移值
 # vars
 PIPE_NEW = 0
@@ -110,6 +112,17 @@ def createPipes(layer, gameScene, spriteBird, score):
             if pipeState[i] == PIPE_NEW and pipes[i].position[0]< birdXPosition:
                 pipeState[i] = PIPE_PASS
                 g_score = g_score + 1
+                
+                tmp_time = time.time()
+                tmp_total_time = tmp_time - game_controller.start_time
+                tmp_total_time *= 1000000
+                _tmp_total_time = int(tmp_total_time)
+                _tmp_total_time_str = str(_tmp_total_time)
+                print("_tmp_total_time_str", _tmp_total_time_str)
+                if game_controller.state == game_controller.GUEST:
+                    saveRecord('guest', '', g_score, _tmp_total_time_str, game_controller.game_difficulty)
+                else:
+                    saveRecord(game_controller.account, game_controller.password, g_score, _tmp_total_time_str, game_controller.game_difficulty)
                 setSpriteScores(g_score) #show score on top of screen
     
     g_score = score

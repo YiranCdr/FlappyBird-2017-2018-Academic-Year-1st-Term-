@@ -6,6 +6,7 @@ from cocos.euclid import *
 from cocos.collision_model import *
 from cocos.actions import *
 import common
+from pyglet import image
 
 #位置信息
 atlas = {}
@@ -91,8 +92,15 @@ def createAnimatingSprite(name):
     return sprite
 
 class CollidableAnimatingSprite(cocos.sprite.Sprite):
-    def __init__(self, image, center_x, center_y, radius):
-        super(CollidableAnimatingSprite, self).__init__(common.load_image(image+".gif"))
+    def __init__(self, _image, center_x, center_y, radius):
+        # super(CollidableAnimatingSprite, self).__init__(common.load_image(image+".gif"))
+        # 用png去模拟gif效果
+        super(CollidableAnimatingSprite, self).__init__(common.load_image(_image+"0.png"))
+        actionimage1=image.AnimationFrame(common.load_image(_image+"0.png"),0.1)
+        actionimage2=image.AnimationFrame(common.load_image(_image+"1.png"),0.1)
+        actionimage3=image.AnimationFrame(common.load_image(_image+"2.png"),0.1)
+        actionimage=image.Animation([actionimage1,actionimage2,actionimage3])
+        self.image = actionimage
         self.position = (center_x, center_y)
         self.cshape = CircleShape(Vector2(center_x, center_y), radius)
         self.name = image
