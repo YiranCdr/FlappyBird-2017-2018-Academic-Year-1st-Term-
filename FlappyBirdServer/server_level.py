@@ -38,17 +38,17 @@ def checkKey_thread():
 	hook_manager.hook()
 
 
-tmp_judge = input('Do you want to add your BlackList? [y = 1/n = 0, a number]')
-while tmp_judge == 1:
-	print 'Add into Black List. '
-	black_account = input("UserName(with '' as a string): ")
+tmp_judge = raw_input('Do you want to add your BlackList? [y/n]')
+while tmp_judge == 'y' or tmp_judge == 'Y':
+	print 'Add into Black List: '
+	black_account = raw_input("UserName: ")
 	black_password = '0'
 	if file_operation_level.search_user_black_list(black_account) == file_operation_level.NO_SUCH_USER:
 		file_operation_level.write_new_user_black_list(black_account, black_password)
 		print 'Add into black list successfully. '
 	else:
 		print 'Account already exist in black list. '
-	tmp_judge = input('Do you want to add your BlackList? [y = 1/n = 0]')
+	tmp_judge = raw_input('Do you want to add your BlackList? [y/n]')
 
 
 print 'Press F12 to start/reset server. \n' \
