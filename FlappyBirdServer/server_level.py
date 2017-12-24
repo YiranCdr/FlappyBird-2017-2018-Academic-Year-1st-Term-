@@ -18,6 +18,13 @@ OFF = 0
 server_state = OFF
 
 
+def judge_input_type(ju):
+	if type(ju)!= type('str'):
+		print 'Wrong type. str without '' please. '
+		return False
+	return True
+
+
 def checkKey(event):
 	if isinstance(event, pyhooked.KeyboardEvent):
 		global server_state
@@ -39,20 +46,35 @@ def checkKey_thread():
 
 
 tmp_judge = raw_input('Do you want to add your BlackList? [y/n]')
+while judge_input_type(tmp_judge) == False:
+	tmp_judge = raw_input('Do you want to add your BlackList? [y/n]')
+
+while tmp_judge != 'y' and tmp_judge != 'Y' and tmp_judge != 'n' and tmp_judge != 'N':
+	print 'Invalid choice. '
+	tmp_judge = raw_input('Do you want to add your BlackList? [y/n]')
+
 while tmp_judge == 'y' or tmp_judge == 'Y':
 	print 'Add into Black List: '
 	black_account = raw_input("UserName: ")
+	while judge_input_type(black_account) == False:
+		black_account = raw_input("UserName: ")
 	black_password = '0'
 	if file_operation_level.search_user_black_list(black_account) == file_operation_level.NO_SUCH_USER:
 		file_operation_level.write_new_user_black_list(black_account, black_password)
 		print 'Add into black list successfully. '
 	else:
 		print 'Account already exist in black list. '
+
 	tmp_judge = raw_input('Do you want to add your BlackList? [y/n]')
+	while judge_input_type(tmp_judge) == False:
+		tmp_judge = raw_input('Do you want to add your BlackList? [y/n]')
+	while tmp_judge != 'y' and tmp_judge != 'Y' and tmp_judge != 'n' and tmp_judge != 'N':
+		print 'Invalid choice. '
+		tmp_judge = raw_input('Do you want to add your BlackList? [y/n]')
 
 
 print 'Press F12 to start/reset server. \n' \
-	  'You will see a statement to inform you that the server has been turned on. \n' \
+	  'You will see a statement to inform you that the server has started. \n' \
 	  'If nothing work, press Fn and F12. '
 
 
@@ -117,7 +139,7 @@ while inputs:
 
 						print(recvData['notice'])
 						print 'receive notice request from user id:', number
-						broadcast_content = "Boradcast: " + recvData['notice']
+						broadcast_content = "Broadcast: " + recvData['notice']
 						sendData = {"notice_content": broadcast_content, 'sid': number, 'account': recvData['account']}
 
 						for online_sid in onlineUser:
