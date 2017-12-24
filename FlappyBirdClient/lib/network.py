@@ -42,51 +42,53 @@ def connect(gameScene):
             import game_controller
             serialID = data['sid']
 
+        # 用于broadcast
         if 'notice_content' in data:
             import game_controller
             game_controller.showContent(data['notice_content']) #show+Content is from game_controller
 
+        # 根据Server返回信息调用showLogInMessage显示对应信息
         if 'error1' in data:
             print data['error1']
             logInState = 1
             import game_controller
-            game_controller.sendLogInMessange(logInState)
+            game_controller.showLogInMessange(logInState)
 
         if 'create' in data:
             print data['create']
             import game_controller
             logInState = 2
-            game_controller.sendLogInMessange(logInState)
+            game_controller.showLogInMessange(logInState)
 
         # if 'error1-1' in data:
         #     print data['error1-1']
         #     logInState = 3
         #     import game_controller
-        #     game_controller.sendLogInMessange(logInState)
+        #     game_controller.showLogInMessange(logInState)
             
         if 'error2' in data:
             print data['error2']
             logInState = 6
             import game_controller
-            game_controller.sendLogInMessange(logInState)
+            game_controller.showLogInMessange(logInState)
 
         if 'error2-1' in data:
             print data['error2-1']
             logInState = 7
             import game_controller
-            game_controller.sendLogInMessange(logInState)
+            game_controller.showLogInMessange(logInState)
 
         if 'error3' in data:
             print data['error3']
             logInState = 8
             import game_controller
-            game_controller.sendLogInMessange(logInState)
+            game_controller.showLogInMessange(logInState)
 
         if 'successfully' in data:
             print data['successfully']
             logInState = 9
             import game_controller
-            game_controller.sendLogInMessange(logInState)
+            game_controller.showLogInMessange(logInState)
 
         if 'log_out' in data:
             print ("log_out")
@@ -112,18 +114,19 @@ def get_send_data():
     return send_data
 
 #向server请求公告
-def request_notice():
-    send_data = get_send_data()
-    send_data['notice'] = 'request notice'
-    netstream.send(sock, send_data)
+# def request_notice():
+#     send_data = get_send_data()
+#     send_data['notice'] = 'request notice'
+#     netstream.send(sock, send_data)
 
+# 向server请求best信息
 def request_champion(difficulty):
     send_data = get_send_data()
     send_data['requestChampion'] = 'requestChampion'
     send_data['level'] = difficulty
     netstream.send(sock, send_data)
 
-
+# 向Server发送登录信息
 def send_log_in_message(sendState, account, password):
     send_data = get_send_data()
     send_data['sendState'] = sendState
@@ -131,11 +134,13 @@ def send_log_in_message(sendState, account, password):
     send_data['password'] = password
     netstream.send(sock, send_data)
 
+# 向server发送登出信息
 def send_log_out():
     send_data = get_send_data()
     send_data['log_out'] = True
     netstream.send(sock, send_data)
 
+# 向server发送分数信息
 def send_score(account, password, score, time, level):
     send_data = get_send_data()
     print 'send_score', score, account
@@ -146,6 +151,7 @@ def send_score(account, password, score, time, level):
     send_data['level'] = level
     netstream.send(sock, send_data)
 
+# 向server发送broadcast信息
 def send_notice(notice_send, account):
     send_data = get_send_data()
     send_data['notice'] = notice_send

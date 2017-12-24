@@ -24,7 +24,8 @@ import common
 #     land_2.do(Repeat(sequence(move2, reset2)))
     
 #     return land_1, land_2
-#一个单位长度=24
+
+#一个land绿条的单位长度=24
 def createLand():
     landHeight = atlas["land"]["height"]/4 #取land的高度的1/4
     

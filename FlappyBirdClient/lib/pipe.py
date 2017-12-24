@@ -64,15 +64,6 @@ def createPipes(layer, gameScene, spriteBird, score):
             #设置管道高度和位置
             center = random.randint(170, 400)
             singlePipe.position=(common.visibleSize["width"] + i*pipeInterval + waitDistance, center - pipeHeight/2 - pipeDistance[i]/2)
-            ##############################
-            # pipeDistance[i] = 100 - 10 * difficulty + random.randint(0, 20)
-            # center = random.randint(256 - 10/2, 256 + 10/2)
-            # pipeNode.get('downPipe').position = (0, pipeDistance[i] + pipeHeight)
-            # pipeNode.get('downPipe').cshape.center = (0, pipeDistance[i] + pipeHeight) 
-            # pipeNode.position = (common.visibleSize["width"] + i*pipeInterval + waitDistance, center - pipeHeight/2 - pipeDistance[i]/2)
-            # upPipeYPosition[i] = center - pipeDistance[i]/2
-            # downPipeYPosition[i] = center + pipeDistance[i]/2
-            ##############################
             layer.add(singlePipe, z=5)
             pipes[i] = singlePipe
             pipeState[i] = PIPE_NEW
@@ -91,7 +82,7 @@ def createPipes(layer, gameScene, spriteBird, score):
                 pipeState[i] = PIPE_NEW
                 ###########################
                 pipeDistance[i] = 150 - 15 * difficulty + random.randint(0, 20)
-                center = random.randint(170, 400)
+                center = random.randint(170, 400) # center为上下水管的纵坐标的中心位置
                 pipeNode.get('downPipe').position = (0, pipeDistance[i] + pipeHeight)
                 pipeNode.get('downPipe').cshape.center = (0, pipeDistance[i] + pipeHeight) 
                 pipeNode.position = (0, center - pipeHeight/2 - pipeDistance[i]/2)
@@ -118,7 +109,7 @@ def createPipes(layer, gameScene, spriteBird, score):
                 tmp_total_time *= 1000000
                 _tmp_total_time = int(tmp_total_time)
                 _tmp_total_time_str = str(_tmp_total_time)
-                print("_tmp_total_time_str", _tmp_total_time_str)
+                # print("_tmp_total_time_str", _tmp_total_time_str)
                 if game_controller.state == game_controller.GUEST:
                     saveRecord('guest', '', g_score, _tmp_total_time_str, game_controller.game_difficulty)
                 else:

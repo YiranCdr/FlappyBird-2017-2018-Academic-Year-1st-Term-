@@ -23,11 +23,11 @@ def setSpriteScores(score):
 
     scoreStr = str(score)
     length = len(scoreStr)
-    first = length * 18 / 2.0 - 9
+    offset = length * 18 / 2.0 - 9 # 计算分数最高位的横坐标偏移量
     i = 0
     for d in scoreStr:
         s = createAtlasSprite("number_score_0"+d)
-        s.position = common.visibleSize["width"]/2 + 18 * i - first, common.visibleSize["height"]*4/5
+        s.position = common.visibleSize["width"]/2 + 18 * i - offset, common.visibleSize["height"]*4/5
         scoreLayer.add(s, z=50)
         spriteScores[i] = s
         i = i + 1

@@ -28,6 +28,7 @@ def creatBird():
     #create bird animate
     birdNum = str(random.randint(0, 2))
     # spriteBird = CollidableAnimatingSprite("bird_"+birdNum, common.visibleSize["width"]/2, common.visibleSize["height"]/2, atlas["bird0_0"]["width"]/2 - 9)
+    # 使用png文件模拟扇翅膀动作
     spriteBird = CollidableAnimatingSprite("bird"+birdNum+"_", common.visibleSize["width"]/2, common.visibleSize["height"]/2, atlas["bird0_0"]["width"]/2 - 9)
 
     return spriteBird
@@ -49,8 +50,8 @@ class birdTouchHandler(cocos.layer.Layer):
            (values like 'SHIFT', 'OPTION', 'ALT')
         """
         #点击屏幕时，如果小鸟没有到达游戏顶部，给它一个上升速度
-        #############！！！！！！！！！！！！！！！！！
         # if x <= common.visibleSize["width"]-2 and x >= common.visibleSize["width"] - 2 - atlas["button_pause"]["width"] and y <= common.visibleSize["height"]-  2 and y >= common.visibleSize["height"] - 2 - atlas["button_pause"]["height"]:
+        # 点击pause按钮时不会给小鸟上升速度
         if x <= 228-2 and x >= 228-10-21 and y <= 512-22 and y >= 512-20-34:
             flag = 0;
         else:

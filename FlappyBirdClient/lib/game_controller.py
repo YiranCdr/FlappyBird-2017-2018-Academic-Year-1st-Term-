@@ -18,10 +18,6 @@ from pipe import *
 from collision import *
 from network import *
 import common
-# from file_operation_level import *
-#####################
-# 按resume时的点击应该是不跳的
-#####################
 
 #vars
 gameLayer = None
@@ -38,12 +34,11 @@ password = None
 ipTextField = None
 errorLabel = None
 isGamseStart = False
-###################################
+# my vars
 REGISTER = 1
 LOG_IN = 2
 GUEST = 3
 state = 0
-
 game_difficulty = 0 
 start_time = None
 end_time = None
@@ -51,8 +46,8 @@ total_time = None
 championAccount = None
 championScore = None
 notice_send = None # 要广播的消息
-########################################################
-
+#####################################################
+# 重写VerticalMenuLayout
 CENTER = font.Text.CENTER
 LEFT = font.Text.LEFT
 RIGHT = font.Text.RIGHT
@@ -86,6 +81,7 @@ def myVerticalMenuLayout(menu):
         item.transform_anchor = (pos_x, pos_y)
         item.generateWidgets(pos_x, pos_y, menu.font_item, menu.font_item_selected)
 
+# 重写EntryMenuItem
 class myEntryMenuItem(MenuItem):
 
     value = property(lambda self: u''.join(self._value), lambda self, v: setattr(self, '_value', list(v)))
@@ -157,6 +153,7 @@ def game_start(_gameScene):
     logIn_button = LogInMenu()
     gameLayer.add(logIn_button, z=20, name="logIn_button")
 
+# 登录界面
 class LogInMenu(Menu):
     def __init__(self):  
         super(LogInMenu, self).__init__()
@@ -207,6 +204,7 @@ class LogInMenu(Menu):
     def exit(self):
         gameScene.end()
 
+# 用户名和密码输入，限长为8
 class InputMenu(Menu):
     def __init__(self):
         # global account, password
@@ -261,13 +259,14 @@ class SingleGameStartMenu(Menu):
         gameLayer.remove("start_button")
         difficulty_button = DifficultyMenu()
         gameLayer.add(difficulty_button, z=20, name="difficulty_button")
-            # singleGameReady() 
+        # singleGameReady() 
 
     def enterNotice(self):
         gameLayer.remove("start_button")
         notice_input_button = NoticeInputMenu()
         gameLayer.add(notice_input_button, z=20, name="notice_input_button")
 
+# 向Server发送logOut消息
 def logOut():
     global gameScene, gameLayer
     connected = connect(gameScene)  # connect is from network.py
@@ -277,18 +276,21 @@ def logOut():
     else:
         send_log_out()
 
+# back to logInMenu
 def backToLogIn():
     gameScene.remove(gameLayer)
     initGameLayer()
     logIn_button = LogInMenu()
     gameLayer.add(logIn_button, z=20, name="logIn_button")
 
+# 得到Server对logOut回应后do logOut
 def doLogOut():
     gameScene.remove(gameLayer)
     initGameLayer()
     logIn_button = LogInMenu()
     gameLayer.add(logIn_button, z=20, name="logIn_button")
 
+# choose difficulty
 class DifficultyMenu(Menu):
     def __init__(self):
         super(DifficultyMenu, self).__init__()
@@ -316,6 +318,7 @@ class DifficultyMenu(Menu):
         game_difficulty = 3
         singleGameReady()
 
+# broadcast button from start_button
 class NoticeInputMenu(Menu):
     def __init__(self):
         super(NoticeInputMenu, self).__init__()
@@ -482,28 +485,21 @@ class RestartMenu(Menu):
             rank = createAtlasSprite("rank",0.8)
             rank.position = (common.visibleSize["width"]/2, common.visibleSize["height"] * 1/4)
             gameLayer.add(rank,z=20)
-            # scoreStr = str(pipe.g_score)
-            # i = 0
-            # for d in scoreStr:
-            #     s = createAtlasSprite("number_score_0"+d)
-            #     s.position =  common.visibleSize["width"]/2 + 18 * i+25, common.visibleSize["height"]*1/4+23
-            #     i = i + 1
-            #     gameLayer.add(s,z=30)
 
+            # 2个label显示best name，用2个是为了显示的立体效果
             label = Label(text=championAccount, position=(common.visibleSize["width"]/2, common.visibleSize["height"] * 1/4-28))
-            # ,font_size=25,color=(0,0,0,0)
             label.element.font_name = 'Hardpixel'
             label.element.font_size = 17
             label.element.color = (255,255,255,1000)
             gameLayer.add(label, z=50)
 
             label_3 = Label(text=championAccount, position=(common.visibleSize["width"]/2+1, common.visibleSize["height"] * 1/4-28+1))
-            # ,font_size=25,color=(0,0,0,0)
             label_3.element.font_name = 'Hardpixel'
             label_3.element.font_size = 17
             label_3.element.color = (254,128,41,1000)
             gameLayer.add(label_3, z=51)
 
+            # 2个label显示best score，用2个是为了显示的立体效果
             label_2 = Label(text=str(championScore), position=(common.visibleSize["width"]/2, common.visibleSize["height"] * 1/4))
             label_2.element.font_name = 'Hardpixel'
             label_2.element.font_size = 15
@@ -528,6 +524,7 @@ class RestartMenu(Menu):
         notice_input_button = NoticeInputMenu2()
         gameLayer.add(notice_input_button, z=20, name="notice_input_button")
 
+# broadcast button from restart_button
 class NoticeInputMenu2(Menu):
     def __init__(self):
         super(NoticeInputMenu2, self).__init__()
@@ -561,7 +558,7 @@ def receive_champion(_name, _score):
     restartButton = RestartMenu()
     gameLayer.add(restartButton, z=20, name="restart_button")
 
-def sendLogInMessange(_logInState):
+def showLogInMessange(_logInState):
     connected = connect(gameScene)  # connect is from network.py
     if not connected:
         content = "Cannot connect to server"

@@ -167,7 +167,7 @@ def saveRecord(account, password, score, time, difficulty):
         write_new_user(account, password)
     if search_user > NO_SUCH_USER:
         update_record(account, score, time, difficulty)
-    print ('saved')
+    # print ('saved')
 
 # 用法示例
 def myDemo():
