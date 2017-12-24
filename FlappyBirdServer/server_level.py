@@ -117,7 +117,7 @@ while inputs:
 
 						print(recvData['notice'])
 						print 'receive notice request from user id:', number
-						broadcast_content = "Boradcast: " + recvData['notice']
+						broadcast_content = "Broadcast: " + recvData['notice']
 						sendData = {"notice_content": broadcast_content, 'sid': number, 'account': recvData['account']}
 
 						for online_sid in onlineUser:
