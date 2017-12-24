@@ -1,10 +1,5 @@
 # -*- coding: utf-8 -*-
-# TODO
-# 在数据库中查找，返回行数
-# 若不存在，添加新用户
-# 若存在，审核密码是否正确
-# 游戏结束，记录战绩
-#
+
 from __future__ import print_function
 import os
 MIN_SCORE = 0
@@ -35,10 +30,39 @@ def search_user(goal_name):
             tmp_lineNum = tmp_lineNum + 1
         return NO_SUCH_USER
 
+
+def search_user_black_list(goal_name):
+    lineNum = NO_SUCH_USER
+    if not os.path.isfile('black_list.txt'):
+        with open('black_list.txt', 'w'):
+            print ('black_list.txt has been created. ')
+            return lineNum
+    with open('black_list.txt', 'r') as user_data_file:
+        tmp_lineNum = 0
+        for line in user_data_file.readlines():
+            if line == '\n':
+                tmp_lineNum = tmp_lineNum + 1
+                continue
+            (user_name, password, socre_str1, time_str1, socre_str2, time_str2, socre_str3, time_str3) = line.split(':', 7)
+            user_name = user_name.strip()
+            if user_name == goal_name:
+                lineNum = tmp_lineNum
+                return lineNum
+            tmp_lineNum = tmp_lineNum + 1
+        return NO_SUCH_USER
+
+
 def write_new_user(user_name, password):
     with open("user_data_level.txt", "a") as user_data_file:
         # username + score + time
         print(user_name + ':' + password + ':0' + ':0' + ':0' + ':0' + ':0' + ':0' , file = user_data_file)
+
+
+def write_new_user_black_list(user_name, password):
+    with open("black_list.txt", "a") as user_data_file:
+        # username + score + time
+        print(user_name + ':' + password + ':0' + ':0' + ':0' + ':0' + ':0' + ':0' , file = user_data_file)
+
 
 # Please use this function once you have checked that the user exist.
 def check_password(userName, password):

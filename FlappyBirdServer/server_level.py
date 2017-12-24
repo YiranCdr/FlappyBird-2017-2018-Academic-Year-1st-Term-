@@ -2,7 +2,7 @@
 import socket, select, netstream, random, pickle, os, traceback, file_operation_level, types, thread, pyhooked
 
 HOST = "127.0.0.1"
-disconnected_list = []#断开连接的客户端列表
+disconnected_list = []  # 断开连接的客户端列表
 onlineUser = {}
 sid = 0
 
@@ -17,11 +17,11 @@ ON = 1
 OFF = 0
 server_state = OFF
 
+
 def checkKey(event):
 	if isinstance(event, pyhooked.KeyboardEvent):
-		print event.key_code
 		global server_state
-		if event.key_code == 48 or event.key_code == 96: # Enter
+		if event.key_code == 123:  # Enter - F12
 			if server_state == OFF:
 				server_state = ON
 			else:
@@ -31,14 +31,34 @@ def checkKey(event):
 				cInfo = []
 				print 'server reset. '
 
+
 def checkKey_thread():
 	hook_manager = pyhooked.Hook()
 	hook_manager.handler = checkKey
 	hook_manager.hook()
 
+
+tmp_judge = input('Do you want to add your BlackList? [y = 1/n = 0, a number]')
+while tmp_judge == 1:
+	print 'Add into Black List. '
+	black_account = input("UserName(with '' as a string): ")
+	black_password = '0'
+	if file_operation_level.search_user_black_list(black_account) == file_operation_level.NO_SUCH_USER:
+		file_operation_level.write_new_user_black_list(black_account, black_password)
+		print 'Add into black list successfully. '
+	else:
+		print 'Account already exist in black list. '
+	tmp_judge = input('Do you want to add your BlackList? [y = 1/n = 0]')
+
+
+print 'Press F12 to start/reset server. \n' \
+	  'You will see a statement to inform you that the server has been turned on. \n' \
+	  'If nothing work, press Fn and F12. '
+
+
 thread.start_new_thread(checkKey_thread, ())
 while server_state == OFF:
-	xxx = 1 # nonsence.
+	xxx = 1  # nonsence.
 
 s = socket.socket()
 host = HOST
@@ -88,15 +108,16 @@ while inputs:
 					print recvData
 
 					number = recvData['sid']
-					if 'notice'in recvData and 'account' in recvData:
+					if 'notice' in recvData and 'account' in recvData:
 
 						# judge if type is acceptable.
-						if type(recvData['notice']) != types.UnicodeType or type(recvData['account']) != types.UnicodeType:
+						if type(recvData['notice']) != types.UnicodeType or type(
+								recvData['account']) != types.UnicodeType:
 							continue
 
 						print(recvData['notice'])
 						print 'receive notice request from user id:', number
-						broadcast_content = "Boradcast: " +  recvData['notice']
+						broadcast_content = "Boradcast: " + recvData['notice']
 						sendData = {"notice_content": broadcast_content, 'sid': number, 'account': recvData['account']}
 
 						for online_sid in onlineUser:
@@ -119,17 +140,27 @@ while inputs:
 
 						print 'Receive: account ', recvData['account'], 'password ', recvData['password']
 						if recvData['sendState'] == REGISTER:
-							if file_operation_level.search_user(recvData['account']) == file_operation_level.NO_SUCH_USER:
+							if file_operation_level.search_user_black_list(recvData['account']) != file_operation_level.NO_SUCH_USER:
+								print 'error: Account in black list. '
+								sendData = {'error1-1': 'Account in black list. ', 'sid': number}
+								netstream.send(onlineUser[number]['connection'], sendData)
+							elif file_operation_level.search_user(
+									recvData['account']) == file_operation_level.NO_SUCH_USER:
 								file_operation_level.write_new_user(recvData['account'], recvData['password'])
 								sendData = {'create': 'new account finished. ', 'sid': number}
 								netstream.send(onlineUser[number]['connection'], sendData)
-								# print 'create new account finished. '
+							# print 'create new account finished. '
 							else:
 								print 'error: Account exist. '
 								sendData = {'error1': 'Account exist. ', 'sid': number}
 								netstream.send(onlineUser[number]['connection'], sendData)
 						elif recvData['sendState'] == LOG_IN:
-							if file_operation_level.search_user(recvData['account']) == file_operation_level.NO_SUCH_USER:
+							if file_operation_level.search_user_black_list(recvData['account']) != file_operation_level.NO_SUCH_USER:
+								print 'error: Account in black list. '
+								sendData = {'error2-1': 'Account in black list. ', 'sid': number}
+								netstream.send(onlineUser[number]['connection'], sendData)
+							elif file_operation_level.search_user(
+									recvData['account']) == file_operation_level.NO_SUCH_USER:
 								print 'error: No such account. '
 								sendData = {'error2': 'No such account. ', 'sid': number}
 								netstream.send(onlineUser[number]['connection'], sendData)
@@ -151,12 +182,15 @@ while inputs:
 
 						sendData = {'log_out': True, 'sid': number}
 						netstream.send(onlineUser[number]['connection'], sendData)
-						print 'log out - sid: ',number
+						print 'log out - sid: ', number
 
 					elif 'account' in recvData and 'password' in recvData and 'score' in recvData and 'time' in recvData and 'level' in recvData:
 
 						# judge if type is acceptable.
-						if type(recvData['account']) != types.UnicodeType or type(recvData['password']) != types.UnicodeType or type(recvData['score']) != type(1) or type(recvData['time']) != type(1) or type(recvData['level']) != type(1) or recvData['level'] < EASY or recvData['level'] > HARD:
+						if type(recvData['account']) != types.UnicodeType or type(
+								recvData['password']) != types.UnicodeType or type(recvData['score']) != type(
+							1) or type(recvData['time']) != type(1) or type(recvData['level']) != type(1) or \
+								recvData['level'] < EASY or recvData['level'] > HARD:
 							print 'type error'
 							continue
 
@@ -164,8 +198,12 @@ while inputs:
 						if not file_operation_level.check_password(recvData['account'], recvData['password']):
 							continue
 						print 'send_score'
-						final_best_score, final_best_time = file_operation_level.update_record(recvData['account'], recvData['score'], recvData['time'], recvData['level'])
-						sendData = {'account': recvData['account'], 'best_score': final_best_score, 'best_time': final_best_time, 'sid': number}
+						final_best_score, final_best_time = file_operation_level.update_record(recvData['account'],
+																							   recvData['score'],
+																							   recvData['time'],
+																							   recvData['level'])
+						sendData = {'account': recvData['account'], 'best_score': final_best_score,
+									'best_time': final_best_time, 'sid': number}
 						netstream.send(onlineUser[number]['connection'], sendData)
 
 					elif 'requestChampion' in recvData and 'level' in recvData:
@@ -174,8 +212,10 @@ while inputs:
 							print 'type error'
 							continue
 						print 'champion request'
-						champion_account, champion_score, champion_time = file_operation_level.find_champion(recvData['level'])
-						sendData = {'championAccount': champion_account, 'championScore': champion_score, 'championTime': champion_time, 'sid': number}
+						champion_account, champion_score, champion_time = file_operation_level.find_champion(
+							recvData['level'])
+						sendData = {'championAccount': champion_account, 'championScore': champion_score,
+									'championTime': champion_time, 'sid': number}
 						netstream.send(onlineUser[number]['connection'], sendData)
 
 	except Exception:
